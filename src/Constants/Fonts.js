@@ -1,0 +1,32 @@
+export const fontSize = {
+  XXXL: 30,
+  XL3: 28,
+  XL2: 26,
+  XL1: 24,
+  XL: 22,
+  L3: 21,
+  L2: 20,
+  L1: 19,
+  L: 18,
+  Normal1: 17,
+  Normal: 16,
+  M1: 15,
+  M: 14,
+  S1: 13,
+  S: 12,
+  XS: 11,
+  XXS: 10,
+  XXXS: 8,
+};
+
+export const Fonts = {
+  bold: 'Montserrat-Bold',
+  medium: 'Montserrat-Medium',
+  semiBold: 'Montserrat-SemiBold',
+  regular: 'Montserrat-Regular',
+  p_Bold: 'Poppins-Bold',
+  p_Medium: 'Poppins-Medium',
+  p_Semibold: 'Poppins-SemiBold',
+  p_Regular: 'Poppins-Regular',
+  p_light: 'Poppins-Light',
+};
