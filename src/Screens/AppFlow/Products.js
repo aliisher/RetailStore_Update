@@ -5,19 +5,19 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import TextInputComp from '../../Components/TextInputComp';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Header from '../../Components/Header';
-import {hp} from '../../Constants/Responsive';
-import {mainContainer} from '../../Constants/StyleSheet';
-import {searchImg} from '../../Assets/Index';
+import { hp } from '../../Constants/Responsive';
+import { mainContainer } from '../../Constants/StyleSheet';
+import { searchImg } from '../../Assets/Index';
 import ProductComp from '../../Components/ProductComp';
-import {Fonts, fontSize} from '../../Constants/Fonts';
-import {request} from '../../Api_Services/ApiServices';
-import {useDispatch, useSelector} from 'react-redux';
-import {Colors} from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
+import { request } from '../../Api_Services/ApiServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { Colors } from '../../Constants/Colors';
 import {
   ADD_TO_CARD,
   DECREMENT_QUANTITY,
@@ -32,8 +32,9 @@ import {
   DECREMENT_RECOMMENDED_QUANTITY,
   INCREMENT_RECOMMENDED_QUANTITY,
 } from '../../Redux/Features/RecommendedCardSlice';
+import Toast from 'react-native-simple-toast';
 
-const Products = ({route}) => {
+const Products = ({ route }) => {
   const getCardData = useSelector(state => state?.CARD?.CART);
   const user = useSelector(state => state?.AUTH);
   const routeData = route?.params;
@@ -84,6 +85,8 @@ const Products = ({route}) => {
       const response = await request.get(
         `products/${routeData?.vender_Id}/${routeData?.department_ID}/${storeGet?.store_manager_id}/${storeGet?.store_id}?page=${page}`,
       );
+      console.log('@RESSPOCNE', response?.data);
+      Toast.show(response?.data?.message, Toast.SHORT);
 
       const sortedProducts =
         response?.data?.vendorproducts?.sort((a, b) => {
@@ -108,6 +111,8 @@ const Products = ({route}) => {
         }
       }
     } catch (err) {
+      Toast.show(err?.response?.message, Toast.SHORT);
+
       console.log('Error@b', JSON.stringify(err.response, null, 2));
     } finally {
       if (loadMore) setLoadingMore(false);
@@ -172,7 +177,7 @@ const Products = ({route}) => {
   //   }
   // }, [isFocused]);
   const getSearchData = async query => {
-    setUserData({searchQuery: query});
+    setUserData({ searchQuery: query });
 
     if (!query) {
       setSearchResults([]);
@@ -288,7 +293,7 @@ const Products = ({route}) => {
             if (userData.searchQuery) {
               const updatedSearchResults = searchResults.map(product =>
                 product.product.id === item.product.id
-                  ? {...product, is_in_wishlist: true}
+                  ? { ...product, is_in_wishlist: true }
                   : product,
               );
               setSearchResults(updatedSearchResults);
@@ -305,7 +310,7 @@ const Products = ({route}) => {
             if (userData.searchQuery) {
               const updatedSearchResults = searchResults.map(product =>
                 product.product.id === item.product.id
-                  ? {...product, is_in_wishlist: false}
+                  ? { ...product, is_in_wishlist: false }
                   : product,
               );
               setSearchResults(updatedSearchResults);
@@ -357,7 +362,7 @@ const Products = ({route}) => {
             numColumns={2}
             contentContainerStyle={styles.flatlistStyle}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <ProductComp
                 productClick={() => handleNavigation(item?.product?.id)}
                 imgSource={item?.product?.product_image}
@@ -382,7 +387,7 @@ const Products = ({route}) => {
             }
           />
         ) : (
-          <Text style={{color: Colors?.black}}>No data found</Text>
+          <Text style={{ color: Colors?.black }}>No data found</Text>
         )}
       </View>
     </SafeAreaView>

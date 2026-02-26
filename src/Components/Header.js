@@ -1,11 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Fonts, fontSize} from '../Constants/Fonts';
-import {hp, isMobileScreen, wp} from '../Constants/Responsive';
-import {Colors} from '../Constants/Colors';
-import {useNavigation} from '@react-navigation/native';
-import {cartImg} from '../Assets/Index';
+import { Fonts, fontSize } from '../Constants/Fonts';
+import { hp, isMobileScreen, wp } from '../Constants/Responsive';
+import { Colors } from '../Constants/Colors';
+import { useNavigation } from '@react-navigation/native';
+import { cartImg } from '../Assets/Index';
 
 const Header = props => {
   const navigation = useNavigation();
@@ -17,20 +17,22 @@ const Header = props => {
           props?.press
             ? () => props?.press && props?.press()
             : () => navigation.goBack()
-        }>
+        }
+      >
         <Icon
           name={props?.leftIcon || 'arrow-back-sharp'}
           size={fontSize.XL1}
           color={props?.iconColor || Colors.chineseBlack}
           type={'antdesign' || props?.leftIconType}
-          style={{marginTop: hp(0.6)}}
+          style={{ marginTop: hp(0.6) }}
         />
       </TouchableOpacity>
       <Text style={[styles.title, props?.titleStyle]}>{props?.title}</Text>
       {props?.addToCart ? (
         <TouchableOpacity
           onPress={props?.onCartPress}
-          style={styles.cartContainer}>
+          style={styles.cartContainer}
+        >
           {/* <AntDesign
             name="shoppingcart"
             size={fontSize.XL1}
@@ -60,7 +62,8 @@ const Header = props => {
       ) : props?.heartImage ? (
         <TouchableOpacity
           onPress={() => props?.heartImgPress()}
-          style={styles.imgView}>
+          style={styles.imgView}
+        >
           <Image
             source={props?.heartImage}
             style={styles.heartImg}
@@ -68,7 +71,7 @@ const Header = props => {
           />
         </TouchableOpacity>
       ) : (
-        <Text style={{color: 'transparent'}}>ssss</Text>
+        <Text style={{ color: '#00000000' }}>ssss</Text>
       )}
     </View>
   );
