@@ -1,9 +1,10 @@
-import {Colors} from './Colors';
-import {wp} from './Responsive';
+import { Colors } from './Colors';
+import { hp, wp } from './Responsive';
 
 export const mainContainer = {
   // width:wp(90),
   flex: 1,
+  marginTop: hp(1),
   alignItems: 'center',
   backgroundColor: Colors.white,
 };

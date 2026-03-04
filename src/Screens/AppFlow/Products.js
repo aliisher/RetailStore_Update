@@ -323,15 +323,28 @@ const Products = ({ route }) => {
       })
       .catch(e => console.log('@ERROR', e));
   };
-
+  const totalCardQuantity = getCardData?.reduce(
+    (total, item) => total + (item.quantity || 0),
+    0,
+  );
   return (
     <SafeAreaView style={mainContainer}>
       <Header
         title="Products"
         titleStyle={styles.titleStyle}
         addToCart={true}
-        onCartPress={() => navigation.navigate('Cart')}
-        cardLength={getCardData?.length}
+        onCartPress={() =>
+          navigation.navigate('FlowNavigation', {
+            screen: 'Parent',
+            params: {
+              screen: 'BottomTabs',
+              params: {
+                screen: 'Cart',
+              },
+            },
+          })
+        }
+        cardLength={totalCardQuantity}
       />
       <TextInputComp
         inputCotainer={styles.textInput}

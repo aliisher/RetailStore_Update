@@ -71,7 +71,8 @@ const Header = props => {
           />
         </TouchableOpacity>
       ) : (
-        <Text style={{ color: '#00000000' }}>ssss</Text>
+        <View style={{ width: fontSize.XL1 }} />
+        // <Text style={{ color: '#00000000' }}>ssss</Text>
       )}
     </View>
   );
