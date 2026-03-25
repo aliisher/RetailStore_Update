@@ -11,7 +11,7 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <StatusBar
-          barStyle={Platform?.OS === 'ios' ? 'dark-content' : 'dark-content'}
+          barStyle={Platform?.OS === 'ios' ? 'dark-content' : 'light-content'}
           backgroundColor={Colors.black}
         />
         <MainNavigation />

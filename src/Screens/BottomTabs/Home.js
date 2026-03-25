@@ -10,13 +10,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {mainContainer} from '../../Constants/StyleSheet';
+import React, { useEffect, useRef, useState } from 'react';
+import { mainContainer } from '../../Constants/StyleSheet';
 import HomeHeader from '../../Components/HomeHeader';
 import TextInputComp from '../../Components/TextInputComp';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import WholeSaleComp from '../../Components/WholeSaleComp';
-import {defaultImage, searchImg} from '../../Assets/Index';
+import { defaultImage, searchImg } from '../../Assets/Index';
 import {
   hp,
   isMobileScreen,
@@ -24,15 +24,15 @@ import {
   windowWidth,
   wp,
 } from '../../Constants/Responsive';
-import {Fonts, fontSize} from '../../Constants/Fonts';
-import {Colors} from '../../Constants/Colors';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import { Fonts, fontSize } from '../../Constants/Fonts';
+import { Colors } from '../../Constants/Colors';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Btn from '../../Components/Btn';
-import {ScrollView} from 'react-native';
-import {request} from '../../Api_Services/ApiServices';
-import {useRoute} from '@react-navigation/native';
-import {Config} from '../../Api_Services/Config';
-import {useDispatch, useSelector} from 'react-redux';
+import { ScrollView } from 'react-native';
+import { request } from '../../Api_Services/ApiServices';
+import { useRoute } from '@react-navigation/native';
+import { Config } from '../../Api_Services/Config';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   ADD_TO_RECOMMENDED_CARD,
   EMPTY_RECOMMENDED_CARD,
@@ -44,7 +44,7 @@ const Home = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const route = useRoute();
-  const {params} = route;
+  const { params } = route;
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [vendorsData, setVendorsdata] = useState([]);
@@ -62,7 +62,7 @@ const Home = () => {
   const [venderId, setVenderID] = useState([]);
   const user = useSelector(state => state?.AUTH?.userData);
   const store = useSelector(state => state?.AUTH?.storeData);
-
+  console.log('@STORE', store);
   useEffect(() => {
     if (isFocused) {
       getBannerData();
@@ -105,7 +105,9 @@ const Home = () => {
 
           // Step 4: Navigate to the recommended cart after all products are added
           setIsVisible(false);
-          navigation.navigate('RecommendedCartComponent', {recommended: true});
+          navigation.navigate('RecommendedCartComponent', {
+            recommended: true,
+          });
         } else if (response?.data?.status == 'info') {
           // Step 5: Handle any errors from the API
           setIsVisible(false);
@@ -130,7 +132,7 @@ const Home = () => {
     setLoading(true);
     try {
       const response = await request.get(
-        `wholesalers/${params?.store_manager_id}/${params?.store_id}`,
+        `wholesalers/${store?.store_manager_id}/${store?.store_id}`,
       );
       setVendorsdata(response?.data?.Vendors);
     } catch (err) {
@@ -147,7 +149,7 @@ const Home = () => {
       )
     : vendorsData;
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View style={styles.bannerRow}>
         <Text
@@ -156,11 +158,12 @@ const Home = () => {
             fontSize: wp(4),
             fontFamily: Fonts.semiBold,
             width: wp('50%'),
-          }}>
+          }}
+        >
           {item?.name}
         </Text>
         <Image
-          source={error ? defaultImage : {uri: Config.domain + item?.image}}
+          source={error ? defaultImage : { uri: Config.domain + item?.image }}
           style={{
             width: wp('20%'),
             height: wp('20%'),
@@ -182,8 +185,9 @@ const Home = () => {
   return (
     <SafeAreaView style={mainContainer}>
       <ScrollView
-        contentContainerStyle={{alignItems: 'center'}}
-        showsVerticalScrollIndicator={false}>
+        contentContainerStyle={{ alignItems: 'center' }}
+        showsVerticalScrollIndicator={false}
+      >
         <HomeHeader />
         <TouchableOpacity onPress={handlePress}>
           <TextInputComp
@@ -200,7 +204,7 @@ const Home = () => {
                 ...prevState,
                 degreeError: null,
               }));
-              setUserData(prevState => ({...prevState, email: text}));
+              setUserData(prevState => ({ ...prevState, email: text }));
             }}
           />
         </TouchableOpacity>
@@ -227,7 +231,7 @@ const Home = () => {
               inactiveDotOpacity={0.4}
               inactiveDotStyle={[
                 styles.paginationDot,
-                {backgroundColor: Colors.white},
+                { backgroundColor: Colors.white },
               ]}
               inactiveDotScale={0.6}
             />
@@ -250,13 +254,14 @@ const Home = () => {
               numColumns={2}
               contentContainerStyle={styles.flatlistStyle}
               showsVerticalScrollIndicator={false}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.itemContainer}
                   onPress={() => {
                     setIsVisible(true);
                     setVenderID(item?.vendor?.id);
-                  }}>
+                  }}
+                >
                   <WholeSaleComp
                     imgSource={item.vendor?.image}
                     title={item?.vendor?.vendor_name}
@@ -266,11 +271,11 @@ const Home = () => {
               )}
             />
           ) : (
-            <View style={{marginTop: hp(15)}}>
+            <View style={{ marginTop: hp(15) }}>
               {loading ? (
                 <ActivityIndicator size={40} color={Colors.primary} />
               ) : (
-                <Text style={{color: Colors.black}}>No data found</Text>
+                <Text style={{ color: Colors.black }}>No data found</Text>
               )}
             </View>
           )}
@@ -279,7 +284,8 @@ const Home = () => {
           visible={isVisible}
           animationType="fade"
           transparent={true}
-          onRequestClose={() => setIsVisible(false)}>
+          onRequestClose={() => setIsVisible(false)}
+        >
           <TouchableWithoutFeedback onPress={() => setIsVisible(false)}>
             <View style={styles.mainView}>
               <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
@@ -304,7 +310,9 @@ const Home = () => {
                     textColor={Colors.primary}
                     backgroundColor={Colors.white}
                     onPress={() => {
-                      navigation.navigate('Department', {vender_Id: venderId}),
+                      navigation.navigate('Department', {
+                        vender_Id: venderId,
+                      }),
                         setIsVisible(false);
                     }}
                   />

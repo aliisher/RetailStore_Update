@@ -6,28 +6,28 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
-import {mainContainer} from '../../Constants/StyleSheet';
-import {hp, isMobileScreen, wp} from '../../Constants/Responsive';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
+import { mainContainer } from '../../Constants/StyleSheet';
+import { hp, isMobileScreen, wp } from '../../Constants/Responsive';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
 import InVoiceDetailComp from '../../Components/InVoiceDetailComp';
 import ProductInvoiceDetailComp from '../../Components/ProductInvoiceDetailComp';
-import {Divider} from '@rneui/base';
+import { Divider } from '@rneui/base';
 import Btn from '../../Components/Btn';
-import {useNavigation} from '@react-navigation/native';
-import {TouchableWithoutFeedback} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {request} from '../../Api_Services/ApiServices';
-import {EMPTY_CARD} from '../../Redux/Features/CardSlice';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { request } from '../../Api_Services/ApiServices';
+import { EMPTY_CARD } from '../../Redux/Features/CardSlice';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
-import {Config} from '../../Api_Services/Config';
-import {EMPTY_RECOMMENDED_CARD} from '../../Redux/Features/RecommendedCardSlice';
+import { Config } from '../../Api_Services/Config';
+import { EMPTY_RECOMMENDED_CARD } from '../../Redux/Features/RecommendedCardSlice';
 import Toast from 'react-native-simple-toast';
 
-const InVoice = ({route}) => {
+const InVoice = ({ route }) => {
   const dispatch = useDispatch();
   const routeData = route?.params;
   const recommed = route?.params?.recommended;
@@ -94,18 +94,17 @@ const InVoice = ({route}) => {
     formData.append('total_quantity', routeData?.product_Quantity);
     formData.append('products', JSON.stringify(selectedItems));
     formData.append('status', 'In-Progress');
-
     try {
       const response = await request.post('orders', formData);
-
       const res = response?.data;
-      if (res?.order) {
-        Toast.show(res?.message, Toast.SHORT);
 
+      if (res?.data) {
+        Toast.show(res?.message, Toast.SHORT);
         handleOrderCompletion(PDF);
       }
     } catch (err) {
       console.log('err', JSON.stringify(err, null, 2));
+      Toast.show(err?.message, Toast.SHORT);
     } finally {
       setLoadingButton(null);
     }
@@ -122,7 +121,7 @@ const InVoice = ({route}) => {
     }
 
     dispatch(EMPTY_CARD());
-    navigation.replace('MyOrder', {title: 'My Orders'});
+    navigation.replace('MyOrder', { title: 'My Orders' });
   };
 
   const saveOrder = () => {
@@ -169,6 +168,8 @@ const InVoice = ({route}) => {
       })
       .catch(err => {
         setLoading1(false);
+        Toast.show('Logout successfully', Toast.SHORT);
+
         console.log('errssss', JSON?.stringify(err.message, null, 2));
       })
       .finally(() => {
@@ -427,7 +428,8 @@ const InVoice = ({route}) => {
           visible={isVisible}
           animationType="fade"
           transparent={true}
-          onRequestClose={() => setIsVisible(false)}>
+          onRequestClose={() => setIsVisible(false)}
+        >
           <TouchableWithoutFeedback onPress={() => setIsVisible(false)}>
             <View style={styles.mainView}>
               <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
