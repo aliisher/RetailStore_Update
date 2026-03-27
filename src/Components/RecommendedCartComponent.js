@@ -15,28 +15,29 @@ import {
   windowWidth,
   isMobileScreen,
 } from '../Constants/Responsive';
-import {Fonts, fontSize} from '../Constants/Fonts';
-import {fonts, Icon} from '@rneui/base';
-import {Colors} from '../Constants/Colors';
+import { Fonts, fontSize } from '../Constants/Fonts';
+import { fonts, Icon } from '@rneui/base';
+import { Colors } from '../Constants/Colors';
 import Header from './Header';
 import Btn from './Btn';
-import {mainContainer} from '../Constants/StyleSheet';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {Config} from '../Api_Services/Config';
+import { mainContainer } from '../Constants/StyleSheet';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Config } from '../Api_Services/Config';
 import {
   DECREMENT_RECOMMENDED_QUANTITY,
   INCREMENT_RECOMMENDED_QUANTITY,
   REMOVE_FROM_RECOMMENDED_CARD,
 } from '../Redux/Features/RecommendedCardSlice';
-import {useEffect, useState} from 'react';
-import {defaultImage} from '../Assets/Index';
+import { useEffect, useState } from 'react';
+import { defaultImage } from '../Assets/Index';
+import Toast from 'react-native-simple-toast';
 
 const shadowOpacity = Platform.select({
   ios: null,
   android: windowWidth * 0.05,
 });
-export default function RecommendedCartComponent({route}) {
+export default function RecommendedCartComponent({ route }) {
   const navigation = useNavigation();
   const recommend = route?.params?.recommended;
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ export default function RecommendedCartComponent({route}) {
     let totalPrice = 0;
 
     RECOMMENDED_CARD?.forEach(product => {
-      const {quantity = 0, price = 0} = product;
+      const { quantity = 0, price = 0 } = product;
       totalQuantity += quantity;
       totalPrice += quantity * price;
     });
@@ -68,7 +69,29 @@ export default function RecommendedCartComponent({route}) {
   const decreaseQuantity = item => {
     dispatch(DECREMENT_RECOMMENDED_QUANTITY(item?.product_id));
   };
+  // const handleCheckout = async () => {
+  //   setLoading(true);
+  //   try {
+  //     navigation.navigate('InVoice', {
+  //       product_Price: price,
+  //       product_Quantity: totalQuantity,
+  //       recommended: true,
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleCheckout = async () => {
+    const hasZeroQty = RECOMMENDED_CARD?.some(item => item?.quantity === 0);
+
+    if (hasZeroQty) {
+      Toast.show(
+        'Update or remove zero-quantity items before checkout',
+        Toast.LONG,
+      );
+      return;
+    }
+
     setLoading(true);
     try {
       navigation.navigate('InVoice', {
@@ -121,7 +144,7 @@ export default function RecommendedCartComponent({route}) {
                   onPress={handleCheckout}
                 />
               </View>
-              <View style={{paddingTop: windowHeight * 0.03}}>
+              <View style={{ paddingTop: windowHeight * 0.03 }}>
                 <Btn
                   text="Add More Items"
                   fontSize={16}
@@ -142,7 +165,8 @@ export default function RecommendedCartComponent({route}) {
                 style={{
                   paddingTop: windowHeight * 0.03,
                   paddingBottom: windowHeight * 0.07,
-                }}>
+                }}
+              >
                 <Btn
                   text="Add From Wishlist"
                   fontSize={16}
@@ -159,12 +183,12 @@ export default function RecommendedCartComponent({route}) {
             </View>
           </View>
         }
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View style={styles.cartContainer}>
             <View style={styles.cartImgContainer}>
               <Image
                 source={
-                  error ? defaultImage : {uri: Config?.domain + item?.image}
+                  error ? defaultImage : { uri: Config?.domain + item?.image }
                 }
                 resizeMode="contain"
                 style={styles.cartImg}
@@ -188,13 +212,15 @@ export default function RecommendedCartComponent({route}) {
                 <View style={styles.amountMain}>
                   <TouchableOpacity
                     style={styles.amountView}
-                    onPress={() => decreaseQuantity(item)}>
+                    onPress={() => decreaseQuantity(item)}
+                  >
                     <Text style={styles.quantityText}>-</Text>
                   </TouchableOpacity>
                   <Text style={styles.amountText}>{item?.quantity}</Text>
                   <TouchableOpacity
                     style={styles.amountViewplus}
-                    onPress={() => increaseQuantity(item)}>
+                    onPress={() => increaseQuantity(item)}
+                  >
                     <Text style={styles.quantityTextplus}>+</Text>
                   </TouchableOpacity>
                 </View>
@@ -228,7 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.005,
     backgroundColor: Colors.white,
     shadowColor: Colors.black,
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity: windowWidth * 0.3,
     shadowRadius: windowWidth * 0.6,
     elevation: windowWidth * 0.02,
@@ -290,7 +316,7 @@ const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.01,
     borderColor: Colors?.primary,
     borderWidth: wp(0.1),
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity,
     shadowRadius: windowWidth * 0.06,
     elevation: windowWidth * 0.01,
@@ -304,7 +330,7 @@ const styles = StyleSheet.create({
     borderColor: Colors?.primary,
     borderWidth: wp(0.1),
     shadowColor: Colors.black,
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity,
     shadowRadius: windowWidth * 0.06,
     elevation: windowWidth * 0.01,

@@ -1,10 +1,10 @@
-import {Modal, StyleSheet, View} from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 import React from 'react';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Btn from './Btn';
-import {hp, wp} from '../Constants/Responsive';
-import {Colors} from '../Constants/Colors';
-import {fontSize} from '../Constants/Fonts';
+import { hp, wp } from '../Constants/Responsive';
+import { Colors } from '../Constants/Colors';
+import { fontSize } from '../Constants/Fonts';
 
 const ModalComp = props => {
   return (
@@ -12,7 +12,8 @@ const ModalComp = props => {
       visible={props?.isVisible}
       animationType="fade"
       transparent={true}
-      onRequestClose={() => props?.isVisible}>
+      onRequestClose={() => props?.isVisible}
+    >
       <TouchableWithoutFeedback>
         <View style={styles.mainView}>
           <View style={styles.modalBody}>
