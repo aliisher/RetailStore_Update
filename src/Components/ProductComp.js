@@ -1,6 +1,13 @@
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
-import {Colors} from '../Constants/Colors';
+import { Colors } from '../Constants/Colors';
 import {
   hp,
   isMobileScreen,
@@ -8,14 +15,14 @@ import {
   windowWidth,
   wp,
 } from '../Constants/Responsive';
-import {Fonts, fontSize} from '../Constants/Fonts';
-import {defaultImage, heartFill, heartImg} from '../Assets/Index';
+import { Fonts, fontSize } from '../Constants/Fonts';
+import { defaultImage, heartFill, heartImg } from '../Assets/Index';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Config} from '../Api_Services/Config';
+import { Config } from '../Api_Services/Config';
 
 const shadowOpacity = Platform.select({
   ios: null,
-  android: windowWidth * 0.05, 
+  android: windowWidth * 0.05,
 });
 const ProductComp = props => {
   const isValidImageFormat = url => {
@@ -25,7 +32,8 @@ const ProductComp = props => {
   return (
     <TouchableOpacity
       style={styles.mainStyling}
-      onPress={() => props?.productClick && props.productClick()}>
+      onPress={() => props?.productClick && props.productClick()}
+    >
       <View>
         <View style={styles.priceMainView}>
           <View style={styles.taxableView}>
@@ -34,7 +42,8 @@ const ProductComp = props => {
           <View style={styles.imagesView}>
             <TouchableOpacity
               onPress={() => props?.favorite()}
-              style={styles.imgView}>
+              style={styles.imgView}
+            >
               <Image
                 source={props?.isFavorite == true ? heartFill : heartImg}
                 style={[
@@ -61,7 +70,7 @@ const ProductComp = props => {
         <Image
           source={
             isValidImageFormat(props?.imgSource[0]?.product_image)
-              ? {uri: Config.domain + props?.imgSource[0]?.product_image}
+              ? { uri: Config.domain + props?.imgSource[0]?.product_image }
               : defaultImage
           }
           style={styles.imgStyle}
@@ -80,28 +89,32 @@ const ProductComp = props => {
         <View style={styles.amountMain}>
           <TouchableOpacity
             style={styles.amountView}
-            onPress={props?.onDecrease}>
+            onPress={props?.onDecrease}
+          >
             <Text
               style={{
-                paddingTop: 5,
+                paddingVertical: 5,
                 color: Colors.primary,
                 fontSize: fontSize.L,
                 fontFamily: Fonts.p_Regular,
-              }}>
+              }}
+            >
               -
             </Text>
           </TouchableOpacity>
           <Text style={styles.amountText}>{props?.quantity}</Text>
           <TouchableOpacity
             style={styles.amountViewplus}
-            onPress={props?.onIncrease}>
+            onPress={props?.onIncrease}
+          >
             <Text
               style={{
-                paddingTop: 5,
+                paddingVertical: 5,
                 color: Colors.white,
                 fontSize: fontSize.L,
                 fontFamily: Fonts.p_Regular,
-              }}>
+              }}
+            >
               +
             </Text>
           </TouchableOpacity>
@@ -186,7 +199,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.medium,
     fontSize: isMobileScreen ? fontSize.XXS : fontSize.S,
   },
-  
+
   amountView: {
     backgroundColor: Colors.white,
     width: wp(13),
@@ -195,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.01,
     borderColor: Colors?.primary,
     borderWidth: wp(0.1),
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity,
     shadowRadius: windowWidth * 0.06,
     elevation: windowWidth * 0.01,
@@ -208,7 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.01,
     borderColor: Colors?.primary,
     borderWidth: wp(0.1),
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity,
     shadowRadius: windowWidth * 0.06,
     elevation: windowWidth * 0.01,

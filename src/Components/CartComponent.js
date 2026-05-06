@@ -6,7 +6,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   wp,
   hp,
@@ -14,14 +14,14 @@ import {
   windowWidth,
   isMobileScreen,
 } from '../Constants/Responsive';
-import {Fonts, fontSize} from '../Constants/Fonts';
-import {Icon} from '@rneui/base';
-import {Colors} from '../Constants/Colors';
-import {Config} from '../Api_Services/Config';
-import {defaultImage} from '../Assets/Index';
+import { Fonts, fontSize } from '../Constants/Fonts';
+import { Icon } from '@rneui/base';
+import { Colors } from '../Constants/Colors';
+import { Config } from '../Api_Services/Config';
+import { defaultImage } from '../Assets/Index';
 const shadowOpacity = Platform.select({
   ios: null,
-  android: windowWidth * 0.05, 
+  android: windowWidth * 0.05,
 });
 const CartComponent = ({
   cartTitle,
@@ -40,7 +40,7 @@ const CartComponent = ({
       {/* Image Container */}
       <View style={styles.cartImgContainer}>
         <Image
-          source={error ? defaultImage : {uri: Config?.domain + cartImage}}
+          source={error ? defaultImage : { uri: Config?.domain + cartImage }}
           resizeMode="contain"
           style={styles.cartImg}
           onError={() => setError(true)}
@@ -65,7 +65,8 @@ const CartComponent = ({
             <Text style={styles.amountText}>{quantity}</Text>
             <TouchableOpacity
               style={styles.amountViewplus}
-              onPress={onIncrease}>
+              onPress={onIncrease}
+            >
               <Text style={styles.quantityTextplus}>+</Text>
             </TouchableOpacity>
           </View>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.005,
     backgroundColor: Colors.white,
     shadowColor: Colors.black,
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity: windowWidth * 0.3,
     shadowRadius: windowWidth * 0.6,
     elevation: windowWidth * 0.02,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.01,
     borderColor: Colors?.primary,
     borderWidth: wp(0.1),
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity,
     shadowRadius: windowWidth * 0.06,
     elevation: windowWidth * 0.01,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     borderColor: Colors?.primary,
     borderWidth: wp(0.1),
     shadowColor: Colors.black,
-    shadowOffset: {width: 0, height: windowHeight * 0.03},
+    shadowOffset: { width: 0, height: windowHeight * 0.03 },
     shadowOpacity,
     shadowRadius: windowWidth * 0.06,
     elevation: windowWidth * 0.01,
@@ -169,14 +170,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   quantityText: {
-    paddingTop: 5,
+    paddingVertical: 5,
     color: Colors.primary,
     fontSize: fontSize.L,
     fontFamily: Fonts.p_Regular,
   },
 
   quantityTextplus: {
-    paddingTop: 5,
+    paddingVertical: 5,
     color: Colors.white,
     fontSize: fontSize.L,
     fontFamily: Fonts.p_Regular,

@@ -211,8 +211,13 @@ export default function RecommendedCartComponent({ route }) {
                 <Text style={styles.price}>${item?.price}</Text>
                 <View style={styles.amountMain}>
                   <TouchableOpacity
-                    style={styles.amountView}
+                    // style={styles.amountView}
+                    style={[
+                      styles.amountView,
+                      item?.quantity === 0 && { opacity: 0.4 },
+                    ]}
                     onPress={() => decreaseQuantity(item)}
+                    disabled={item?.quantity === 0}
                   >
                     <Text style={styles.quantityText}>-</Text>
                   </TouchableOpacity>
@@ -341,14 +346,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   quantityText: {
-    paddingTop: 5,
+    paddingVertical: 5,
     color: Colors.primary,
     fontSize: fontSize.L,
     fontFamily: Fonts.p_Regular,
   },
 
   quantityTextplus: {
-    paddingTop: 5,
+    paddingVertical: 5,
     color: Colors.white,
     fontSize: fontSize.L,
     fontFamily: Fonts.p_Regular,

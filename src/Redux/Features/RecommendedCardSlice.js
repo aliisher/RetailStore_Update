@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import Toast from 'react-native-simple-toast';
 
 const initialState = {
@@ -64,14 +64,14 @@ const RECOMMENDED_CARD_SLICE = createSlice({
     DECREMENT_RECOMMENDED_QUANTITY: (state, action) => {
       state.RECOMMENDED_CART.forEach(item => {
         if (item.product_id == action.payload) {
-          if (item?.quantity < 2) {
-            const index = state?.RECOMMENDED_CART?.findIndex(
-              item => item.product_id == action.payload,
-            );
-            if (index != -1) {
-              state?.RECOMMENDED_CART?.splice(index, 1);
-            }
-          }
+          // if (item?.quantity < 2) {
+          //   const index = state?.RECOMMENDED_CART?.findIndex(
+          //     item => item.product_id == action.payload,
+          //   );
+          //   if (index != -1) {
+          //     state?.RECOMMENDED_CART?.splice(index, 1);
+          //   }
+          // }
           if (item.quantity > 0) {
             item.quantity -= 1;
           }

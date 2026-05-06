@@ -97,7 +97,7 @@ const InVoice = ({ route }) => {
     try {
       const response = await request.post('orders', formData);
       const res = response?.data;
-
+      console.log('res', res);
       if (res?.data) {
         Toast.show(res?.message, Toast.SHORT);
         handleOrderCompletion(PDF);
@@ -153,7 +153,9 @@ const InVoice = ({ route }) => {
       .post('orders', formData)
       .then(response => {
         const res = response?.data;
-        if (res?.order) {
+        if (res?.data) {
+          Toast.show('Order created successfully', Toast.SHORT);
+
           setLoading1(false);
           if (recommed) {
             dispatch(EMPTY_RECOMMENDED_CARD());
@@ -168,9 +170,9 @@ const InVoice = ({ route }) => {
       })
       .catch(err => {
         setLoading1(false);
-        Toast.show('Logout successfully', Toast.SHORT);
+        Toast.show('Something went wrong.', Toast.SHORT);
 
-        console.log('errssss', JSON?.stringify(err.message, null, 2));
+        console.log('errssss', JSON?.stringify(err, null, 2));
       })
       .finally(() => {
         setLoading1(false);
