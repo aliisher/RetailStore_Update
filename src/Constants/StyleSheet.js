@@ -10,6 +10,7 @@ export const mainContainer = {
 };
 export const bottomContainer = {
   alignItems: 'center',
+  justifyContent: 'center',
 };
 export const imageStyle = {
   width: wp(5),

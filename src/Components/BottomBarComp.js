@@ -1,9 +1,9 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {isMobileScreen, wp} from '../Constants/Responsive';
-import {bottomContainer} from '../Constants/StyleSheet';
-import {fontSize} from '../Constants/Fonts';
-import {Colors} from '../Constants/Colors';
+import { isMobileScreen, wp } from '../Constants/Responsive';
+import { bottomContainer } from '../Constants/StyleSheet';
+import { fontSize } from '../Constants/Fonts';
+import { Colors } from '../Constants/Colors';
 
 const BottomBarComp = props => {
   return (
@@ -15,7 +15,15 @@ const BottomBarComp = props => {
           resizeMode="contain"
         />
       </View>
-      <Text style={props?.textStyle}>{props?.label}</Text>
+      <Text
+        style={[props?.textStyle, styles.label]}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.72}
+        ellipsizeMode="clip"
+      >
+        {props?.label}
+      </Text>
     </View>
   );
 };
@@ -23,6 +31,10 @@ const BottomBarComp = props => {
 export default BottomBarComp;
 
 const styles = StyleSheet.create({
+  label: {
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
   textStyle: {
     fontSize: fontSize.S,
     color: Colors.spanishGrey,

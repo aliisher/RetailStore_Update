@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, { useEffect } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../Screens/BottomTabs/Home';
 import BottomBarComp from '../Components/BottomBarComp';
-import {Colors} from '../Constants/Colors';
+import { Colors } from '../Constants/Colors';
 import Cart from '../Screens/BottomTabs/Cart';
 import {
   cartFilImg,
@@ -16,16 +16,16 @@ import {
   wishlistFillImg,
   wishlistImg,
 } from '../Assets/Index';
-import {bottomStyle} from '../Components/BottomStylingComp';
+import { bottomStyle } from '../Components/BottomStylingComp';
 import Vendors from '../Screens/BottomTabs/Vendors';
 import Wishlist from '../Screens/BottomTabs/Wishlist';
 import Contacts from '../Screens/BottomTabs/Contacts';
-import {wp, windowWidth, isMobileScreen} from '../Constants/Responsive';
-import {useDispatch, useSelector} from 'react-redux';
-import {StyleSheet, View, Text} from 'react-native';
-import {request} from '../Api_Services/ApiServices';
-import {setWishlistCount} from '../Redux/Features/WishliSlice';
-import {useIsFocused} from '@react-navigation/native';
+import { wp, windowWidth, isMobileScreen } from '../Constants/Responsive';
+import { useDispatch, useSelector } from 'react-redux';
+import { StyleSheet, View, Text } from 'react-native';
+import { request } from '../Api_Services/ApiServices';
+import { setWishlistCount } from '../Redux/Features/WishliSlice';
+import { useIsFocused } from '@react-navigation/native';
 
 const BOTTOM_TABS = createBottomTabNavigator();
 
@@ -62,16 +62,25 @@ const BottomTabs = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
+        tabBarItemStyle: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingVertical: wp(0.35),
+        },
         tabBarStyle: {
           backgroundColor: Colors.whiteSmoke,
-          height: isMobileScreen ? wp(15) : windowWidth * 0.08,
+          height: isMobileScreen ? wp(16.5) : windowWidth * 0.082,
+          paddingTop: wp(0.35),
+          paddingBottom: wp(0.35),
         },
-      }}>
+      }}
+    >
       <BOTTOM_TABS.Screen
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({focused}) => {
+          tabBarIcon: ({ focused }) => {
             const style = bottomStyle(focused);
             return (
               <BottomBarComp
@@ -88,7 +97,7 @@ const BottomTabs = () => {
         name="Vendors"
         component={Vendors}
         options={{
-          tabBarIcon: ({focused}) => {
+          tabBarIcon: ({ focused }) => {
             const style = bottomStyle(focused);
             return (
               <BottomBarComp
@@ -105,7 +114,7 @@ const BottomTabs = () => {
         name="Cart"
         component={Cart}
         options={{
-          tabBarIcon: ({focused}) => {
+          tabBarIcon: ({ focused }) => {
             const style = bottomStyle(focused);
             return (
               <View>
@@ -129,7 +138,7 @@ const BottomTabs = () => {
         name="Wishlist"
         component={Wishlist}
         options={{
-          tabBarIcon: ({focused}) => {
+          tabBarIcon: ({ focused }) => {
             const style = bottomStyle(focused);
             return (
               <View>
@@ -153,7 +162,7 @@ const BottomTabs = () => {
         name="Contacts"
         component={Contacts}
         options={{
-          tabBarIcon: ({focused}) => {
+          tabBarIcon: ({ focused }) => {
             const style = bottomStyle(focused);
             return (
               <BottomBarComp
@@ -176,7 +185,7 @@ const styles = StyleSheet.create({
   cartBadge: {
     position: 'absolute',
     top: -15,
-    right: -10,
+    right: 3,
     backgroundColor: 'red',
     borderRadius: 10,
     width: 20,

@@ -1,42 +1,47 @@
-import {Colors} from '../Constants/Colors';
-import {Fonts, fontSize} from '../Constants/Fonts';
-import {wp, isMobileScreen, windowWidth, hp} from '../Constants/Responsive';
+import { Colors } from '../Constants/Colors';
+import { Fonts, fontSize } from '../Constants/Fonts';
+import { wp, isMobileScreen, windowWidth, hp } from '../Constants/Responsive';
+
+/** ~one fifth of screen minus gutters — keeps long labels on one line when paired with adjustsFontSizeToFit */
+const tabLabelWidth = Math.max(windowWidth / 5 - wp(3), 56);
 
 const mobileResponsive = focused => ({
   textStyle: {
     color: focused ? Colors.primary : Colors.spanishGrey,
-    bottom: focused ? wp(5.5) : wp(0),
-    fontSize: fontSize.XXS,
+    fontSize: fontSize.XS,
     fontFamily: Fonts.medium,
-    marginTop: wp(0.5),
+    marginTop: wp(0.35),
+    textAlign: 'center',
+    width: tabLabelWidth,
   },
   viewStyle: {
-    bottom: focused ? wp(6) : wp(0.5),
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: focused ? Colors.whiteSmoke : null,
-    padding: focused ? wp(4.5) : wp(0),
+    padding: focused ? wp(2.4) : wp(0.35),
     borderRadius: focused ? wp(10) : wp(0),
     borderColor: focused ? Colors.white : null,
-    borderWidth: focused ? wp(1) : wp(0),
+    borderWidth: focused ? wp(0.35) : wp(0),
   },
 });
 
 const tabletResponsive = focused => ({
   textStyle: {
     color: focused ? Colors.primary : Colors.spanishGrey,
-    bottom: focused ? windowWidth * 0.03 : windowWidth * 0,
     fontSize: fontSize.XXS,
     fontFamily: Fonts.medium,
-    marginTop: wp(0.2),
+    marginTop: wp(0.25),
     textAlign: 'center',
-    width: windowWidth * 0.1,
+    width: tabLabelWidth,
   },
   viewStyle: {
-    bottom: focused ? windowWidth * 0.03 : windowWidth * 0.001,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: focused ? Colors.whiteSmoke : null,
-    padding: focused ? hp('4%') : windowWidth * 0,
-    borderRadius: focused ? windowWidth * 2 : windowWidth * 0,
+    padding: focused ? hp('1.8%') : hp('0.4%'),
+    borderRadius: focused ? wp(10) : wp(0),
     borderColor: focused ? Colors.white : null,
-    borderWidth: focused ? wp('.5%') : windowWidth * 0,
+    borderWidth: focused ? wp(0.35) : wp(0),
   },
 });
 

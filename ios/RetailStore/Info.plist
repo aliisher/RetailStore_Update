@@ -92,5 +92,23 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- Share PDF / browse saved invoices in Files app (On My iPhone > RetailStore) -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<!-- iOS 9+: query schemes used when opening Mail / WhatsApp / etc. from share sheet -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>fb</string>
+		<string>fbapi</string>
+		<string>instagram</string>
+		<string>mailto</string>
+		<string>googlegmail</string>
+		<string>tg</string>
+		<string>sms</string>
+		<string>message</string>
+	</array>
 </dict>
 </plist>

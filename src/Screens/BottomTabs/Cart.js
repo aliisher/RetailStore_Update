@@ -1,26 +1,26 @@
-import {SafeAreaView, StyleSheet, Text, View, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {mainContainer} from '../../Constants/StyleSheet';
+import { SafeAreaView, StyleSheet, Text, View, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { mainContainer } from '../../Constants/StyleSheet';
 import Header from '../../Components/Header';
 import CartComponent from '../../Components/CartComponent';
-import {Fonts, fontSize} from '../../Constants/Fonts';
+import { Fonts, fontSize } from '../../Constants/Fonts';
 import {
   isMobileScreen,
   windowHeight,
   windowWidth,
   wp,
 } from '../../Constants/Responsive';
-import {Colors} from '../../Constants/Colors';
+import { Colors } from '../../Constants/Colors';
 import Btn from '../../Components/Btn';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   DECREMENT_QUANTITY,
   INCREMENT_QUANTITY,
   REMOVE_FROM_CARD,
 } from '../../Redux/Features/CardSlice';
 
-export default function Cart({route}) {
+export default function Cart({ route }) {
   const dispatch = useDispatch();
   const getCardData = useSelector(state => state?.CARD?.CART);
   const navigation = useNavigation();
@@ -33,7 +33,7 @@ export default function Cart({route}) {
     let totalPrice = 0;
 
     getCardData?.forEach(product => {
-      const {quantity = 0, price = 0} = product;
+      const { quantity = 0, price = 0 } = product;
       totalQuantity += quantity;
       totalPrice += quantity * price;
     });
@@ -106,6 +106,7 @@ export default function Cart({route}) {
       setLoading(false);
     }
   };
+  console.log('getCardData', getCardData);
   return (
     <SafeAreaView style={mainContainer}>
       <FlatList
@@ -141,7 +142,7 @@ export default function Cart({route}) {
                   loading={loading}
                 />
               </View>
-              <View style={{paddingTop: windowHeight * 0.03}}>
+              <View style={{ paddingTop: windowHeight * 0.03 }}>
                 <Btn
                   text={'Add More Items'}
                   fontSize={16}
@@ -157,7 +158,7 @@ export default function Cart({route}) {
                   }
                 />
               </View>
-              <View style={{paddingTop: windowHeight * 0.03}}>
+              <View style={{ paddingTop: windowHeight * 0.03 }}>
                 <Btn
                   text={'Add From Wishlist'}
                   fontSize={16}
@@ -170,7 +171,7 @@ export default function Cart({route}) {
             </View>
           </View>
         }
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <>
             <CartComponent
               cartTitle={item?.product_name}

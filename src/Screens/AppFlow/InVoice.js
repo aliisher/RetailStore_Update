@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -17,15 +18,15 @@ import ProductInvoiceDetailComp from '../../Components/ProductInvoiceDetailComp'
 import { Divider } from '@rneui/base';
 import Btn from '../../Components/Btn';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableWithoutFeedback } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { request } from '../../Api_Services/ApiServices';
 import { EMPTY_CARD } from '../../Redux/Features/CardSlice';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import Share from 'react-native-share';
+import { generatePDF as createPdfFromHtml } from 'react-native-html-to-pdf';
 import { Config } from '../../Api_Services/Config';
 import { EMPTY_RECOMMENDED_CARD } from '../../Redux/Features/RecommendedCardSlice';
 import Toast from 'react-native-simple-toast';
+import { escapeHtml } from '../../Utils/escapeHtml';
+import { shareInvoicePdf } from '../../Utils/shareInvoicePdf';
 
 const InVoice = ({ route }) => {
   const dispatch = useDispatch();
@@ -205,6 +206,7 @@ const InVoice = ({ route }) => {
   const finalPrice = (productPrice - discountAmount).toFixed(2);
 
   const generatePDF = async () => {
+    console.log('cardData', cardData);
     const discount = cardData[0]?.discount || 0;
     const productPrice = routeData?.product_Price || 0;
 
@@ -213,7 +215,7 @@ const InVoice = ({ route }) => {
 
     // Calculate final price
     const finalPrice = (productPrice - discountAmount).toFixed(2);
-
+    console.log('finalPrice', finalPrice);
     const htmlContent = `
       <html>
         <head>
@@ -240,12 +242,16 @@ const InVoice = ({ route }) => {
               font-size: 24px;
               font-weight: bold;
             }
-            .details {
+            .meta-table {
+              width: 100%;
               margin-top: 20px;
-              display: flex;
-              justify-content: space-between;
+              border-collapse: collapse;
             }
-            .details p {
+            .meta-table td {
+              vertical-align: top;
+              padding: 4px 8px 4px 0;
+            }
+            .meta-table p {
               margin: 5px 0;
             }
             .table {
@@ -291,21 +297,27 @@ const InVoice = ({ route }) => {
         </head>
         <body>
           <div class="invoice-container">
-            <img src="${imagePath}" class="logo" alt="Logo" />
+          ${
+            imagePath
+              ? `<img src="${escapeHtml(imagePath)}" class="logo" alt="Logo" />`
+              : ''
+          }
             <div class="header">Invoice</div>
-            <div class="details">
-              <div>
-                <p>Date: ${formattedDate}</p>
-                <p>Store Manager: ${cardData[0]?.store_manager_name}</p>
-                <p>Invoice for: ${cardData[0]?.vendor_name}</p>
-                <p>Store Phone: ${storeData?.store_phone_no}</p>
-              </div>
-              <div>
-                <p>Invoice#: ${invoiceNumber}</p>
-                <p>Store Name: ${cardData[0]?.store_name}</p>
-                <p>Store Address: ${storeData?.store_address}</p>
-              </div>
-            </div>
+            <table class="meta-table">
+              <tr>
+                <td style="width:50%;">
+                  <p>Date: ${escapeHtml(formattedDate)}</p>
+                  <p>Store Manager: ${escapeHtml(cardData[0]?.store_manager_name)}</p>
+                  <p>Invoice for: ${escapeHtml(cardData[0]?.vendor_name)}</p>
+                  <p>Store Phone: ${escapeHtml(storeData?.store_phone_no)}</p>
+                </td>
+                <td style="width:50%;">
+                  <p>Invoice#: ${escapeHtml(invoiceNumber)}</p>
+                  <p>Store Name: ${escapeHtml(cardData[0]?.store_name)}</p>
+                  <p>Store Address: ${escapeHtml(storeData?.store_address)}</p>
+                </td>
+              </tr>
+            </table>
             <table class="table">
               <thead>
                 <tr>
@@ -319,18 +331,18 @@ const InVoice = ({ route }) => {
                   .map(
                     product =>
                       `<tr>
-                        <td>${product.product_name}</td>
-                        <td>${product.quantity}</td>
-                        <td>$${product.price}</td>
+                        <td>${escapeHtml(product.product_name)}</td>
+                        <td>${escapeHtml(product.quantity)}</td>
+                        <td>$${escapeHtml(product.price)}</td>
                       </tr>`,
                   )
                   .join('')}
               </tbody>
             </table>
             <div class="payable">
-              Sub Total: $${productPrice}<br>
-              Discount: $${discount}<br>
-              Payable: $${finalPrice}
+              Sub Total: $${escapeHtml(productPrice)}<br>
+              Discount: $${escapeHtml(discount)}<br>
+              Payable: $${escapeHtml(finalPrice)}
             </div>
           </div>
         </body>
@@ -340,23 +352,39 @@ const InVoice = ({ route }) => {
     try {
       const options = {
         html: htmlContent,
-        fileName: 'invoice',
+        fileName: `invoice_${Date.now()}`,
         directory: 'Documents',
       };
 
-      const pdf = await RNHTMLtoPDF.convert(options);
-      console.log('PDF generated at:', pdf.filePath);
-      setPdfPath(pdf.filePath);
+      const pdf = await createPdfFromHtml(options);
+      const filePath = pdf?.filePath;
+      if (!filePath) {
+        Toast.show('PDF could not be created.', Toast.SHORT);
+        return;
+      }
+      console.log('PDF generated at:', filePath);
+      setPdfPath(filePath);
 
-      // Share options
-      const shareOptions = {
-        title: 'Share PDF',
-        url: `file://${pdf.filePath}`,
-        type: 'application/pdf',
-      };
-      await Share.open(shareOptions);
+      try {
+        await shareInvoicePdf(filePath, { title: 'Share PDF' });
+      } catch (shareErr) {
+        const dismissed =
+          shareErr?.message === 'User did not share' ||
+          `${shareErr}`.includes('User did not share');
+        if (!dismissed) {
+          console.warn('Share PDF:', shareErr);
+          Toast.show(
+            'PDF saved. Sharing failed — open Files to share it.',
+            Toast.SHORT,
+          );
+        }
+      }
     } catch (error) {
       console.error('Error generating PDF:', error);
+      Toast.show(
+        'Could not create PDF. Please rebuild the app if this persists.',
+        Toast.SHORT,
+      );
     }
   };
 
