@@ -6,18 +6,18 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {hp, wp} from '../../Constants/Responsive';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
-import {mainContainer} from '../../Constants/StyleSheet';
+import React, { useEffect, useState } from 'react';
+import { hp, wp } from '../../Constants/Responsive';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
+import { mainContainer } from '../../Constants/StyleSheet';
 import WishlistComp from '../../Components/WishlistComp';
 import Header from '../../Components/Header';
-import {useIsFocused} from '@react-navigation/native';
-import {request} from '../../Api_Services/ApiServices';
-import {useSelector, useDispatch} from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { request } from '../../Api_Services/ApiServices';
+import { useSelector, useDispatch } from 'react-redux';
 import TextInputComp from '../../Components/TextInputComp';
-import {searchImg} from '../../Assets/Index';
+import { searchImg } from '../../Assets/Index';
 import {
   ADD_TO_CARD,
   INCREMENT_QUANTITY,
@@ -28,7 +28,7 @@ import {
   incrementWishlistCount,
 } from '../../Redux/Features/WishliSlice';
 
-const OtherWholeSalerPrice = ({route, navigation}) => {
+const OtherWholeSalerPrice = ({ route, navigation }) => {
   const storeGet = useSelector(state => state.AUTH?.storeData);
   const user = useSelector(state => state?.AUTH);
   const getCardData = useSelector(state => state?.CARD?.CART);
@@ -76,7 +76,7 @@ const OtherWholeSalerPrice = ({route, navigation}) => {
       product_id: item?.product?.id,
       product_name: item?.product?.product_name,
       image: item?.product?.product_images[0],
-      price: item?.price,
+      price: item?.product?.price,
       quantity: 0,
       store_id: item?.product?.store_id,
       store_manager_id: item?.product?.store_manager_id,
@@ -173,7 +173,7 @@ const OtherWholeSalerPrice = ({route, navigation}) => {
             ...prevState,
             textError: null,
           }));
-          setUserData(prevState => ({...prevState, text: text}));
+          setUserData(prevState => ({ ...prevState, text: text }));
         }}
       />
       <View style={styles.flatListView}>
@@ -188,12 +188,12 @@ const OtherWholeSalerPrice = ({route, navigation}) => {
             numColumns={2}
             contentContainerStyle={styles.flatlistStyle}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <WishlistComp
                   imgSource={item?.product?.product_images[0]}
                   title={item?.product?.product_name}
-                  text={item?.price}
+                  text={item?.product?.price}
                   name={item?.vendor_name}
                   isFavorite={item?.is_in_wishlist}
                   quantity={getQuantity(item?.product?.id, item?.vendor_id)}
@@ -205,7 +205,7 @@ const OtherWholeSalerPrice = ({route, navigation}) => {
             )}
           />
         ) : (
-          <Text style={{color: 'black'}}>No data found</Text>
+          <Text style={{ color: 'black' }}>No data found</Text>
         )}
       </View>
     </SafeAreaView>

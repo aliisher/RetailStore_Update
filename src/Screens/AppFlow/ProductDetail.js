@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {heartFill, heartImg} from '../../Assets/Index';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { heartFill, heartImg } from '../../Assets/Index';
 import {
   hp,
   isMobileScreen,
@@ -21,14 +21,14 @@ import {
   wp,
 } from '../../Constants/Responsive';
 import Header from '../../Components/Header';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
 import WishlistComp from '../../Components/WishlistComp';
 import Footer from './FooterProductDetail';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {request} from '../../Api_Services/ApiServices';
-import {useDispatch, useSelector} from 'react-redux';
-import {Config} from '../../Api_Services/Config';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { request } from '../../Api_Services/ApiServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { Config } from '../../Api_Services/Config';
 import {
   ADD_TO_CARD,
   DECREMENT_QUANTITY,
@@ -48,7 +48,7 @@ const constructUrl = ({
 }) =>
   `getProducts/${vendorId}/${departmentId}/${productId}/${storeManagerId}/${storeId}`;
 
-const ProductDetail = ({route}) => {
+const ProductDetail = ({ route }) => {
   const routeData = route?.params;
   const user = useSelector(state => state?.AUTH);
   const getCardData = useSelector(state => state?.CARD?.CART);
@@ -56,7 +56,7 @@ const ProductDetail = ({route}) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const storeGet = useSelector(state => state.AUTH?.storeData);
-  const {width: viewportWidth} = Dimensions.get('window');
+  const { width: viewportWidth } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [productNamePrice, setProductNamePrice] = useState('');
@@ -85,7 +85,7 @@ const ProductDetail = ({route}) => {
         setProductDetail(product);
         setProductNamePrice({
           name: product?.product?.product_name,
-          price: product?.product_price,
+          price: product?.product?.price,
           productId: product?.product_id,
         });
         return product?.product?.product_image || [];
@@ -110,24 +110,23 @@ const ProductDetail = ({route}) => {
       setLoading(false);
     }
   };
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View style={styles.itemContainer}>
         <Image
-          source={{uri: Config?.domain + item?.product_image}}
+          source={{ uri: Config?.domain + item?.product_image }}
           style={styles.imgStyle}
           resizeMode="contain"
         />
       </View>
     );
   };
-
   const increaseQuantity = () => {
     const product_Detail = {
       product_id: productDetail?.product_id,
       product_name: productDetail?.product?.product_name,
       image: productDetail?.product?.product_image[0]?.product_image,
-      price: productDetail?.product_price,
+      price: productDetail?.product?.price,
       quantity: 0,
       store_id: productDetail?.product?.store_id,
       store_manager_id: productDetail?.product?.store_manager_id,
@@ -178,7 +177,7 @@ const ProductDetail = ({route}) => {
       product_id: item?.product?.id,
       product_name: item?.product?.product_name,
       image: item?.product?.product_images[0],
-      price: item?.price,
+      price: item?.product?.price,
       quantity: 0,
       store_id: item?.product?.store_id,
       store_manager_id: item?.product?.store_manager_id,
@@ -296,21 +295,23 @@ const ProductDetail = ({route}) => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.contentContainerStyle}>
+        contentContainerStyle={styles.contentContainerStyle}
+      >
         <Header
           title="Product detail"
           heartImage={
             productDetail?.is_in_wishlist == true ? heartFill : heartImg
           }
           heartImgPress={() => favoriteFunction()}
-          mainContainer={{position: 'absolute', zIndex: 1}}
+          mainContainer={{ position: 'absolute', zIndex: 1 }}
         />
 
         <View
           style={{
             height: isMobileScreen ? windowHeight * 0.3 : windowHeight * 0.38,
             backgroundColor: Colors.lightSilver,
-          }}>
+          }}
+        >
           <Carousel
             ref={carouselRef}
             data={productImage}
@@ -329,7 +330,7 @@ const ProductDetail = ({route}) => {
             inactiveDotOpacity={0.4}
             inactiveDotStyle={[
               styles.paginationDot,
-              {backgroundColor: Colors.white},
+              { backgroundColor: Colors.white },
             ]}
             inactiveDotScale={0.6}
           />
@@ -348,7 +349,8 @@ const ProductDetail = ({route}) => {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('OtherWholeSalerPrice', routeData)
-                  }>
+                  }
+                >
                   <Text style={styles.ViewAll}>View All</Text>
                 </TouchableOpacity>
               </View>
@@ -363,12 +365,13 @@ const ProductDetail = ({route}) => {
                   numColumns={2}
                   contentContainerStyle={styles.flatlistStyle}
                   showsVerticalScrollIndicator={false}
-                  renderItem={({item}) => (
+                  renderItem={({ item }) => (
                     <View style={styles.wishListContainer}>
                       <WishlistComp
                         imgSource={item?.product?.product_images[0]}
                         title={item?.product_name}
-                        text={item?.price}
+                        // text={item?.price}
+                        text={item?.product?.price}
                         name={item?.vendor_name}
                         isFavorite={item?.is_in_wishlist}
                         quantity={quantity(item?.product?.id, item?.vendor_id)}
@@ -380,7 +383,7 @@ const ProductDetail = ({route}) => {
                   )}
                 />
               ) : (
-                <Text style={{color: 'black'}}>No data found</Text>
+                <Text style={{ color: 'black' }}>No data found</Text>
               )}
             </View>
           </View>
