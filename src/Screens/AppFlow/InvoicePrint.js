@@ -1,36 +1,29 @@
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
-import {mainContainer} from '../../Constants/StyleSheet';
-import {hp, wp} from '../../Constants/Responsive';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
-import {Divider} from '@rneui/base';
-import {useNavigation} from '@react-navigation/native';
-import {printImg} from '../../Assets/Index';
+import { mainContainer } from '../../Constants/StyleSheet';
+import { hp, wp } from '../../Constants/Responsive';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
+import { Divider } from '@rneui/base';
+import { useNavigation } from '@react-navigation/native';
+import { printImg } from '../../Assets/Index';
 import InVoiceOrderDetailComp from '../../Components/InvoiceOrderDetailComp';
 import ProductOrderInvoiceDetailComp from '../../Components/ProductOrderInvoiceDetailComp';
 import Btn from '../../Components/Btn';
-import {request} from '../../Api_Services/ApiServices';
-import {generatePDF as createPdfFromHtml} from 'react-native-html-to-pdf';
+import { request } from '../../Api_Services/ApiServices';
+import { generatePDF as createPdfFromHtml } from 'react-native-html-to-pdf';
 import Toast from 'react-native-simple-toast';
-import {escapeHtml} from '../../Utils/escapeHtml';
-import {shareInvoicePdf} from '../../Utils/shareInvoicePdf';
-import {Config} from '../../Api_Services/Config';
-import {useSelector} from 'react-redux';
+import { escapeHtml } from '../../Utils/escapeHtml';
+import { shareInvoicePdf } from '../../Utils/shareInvoicePdf';
+import { INVOICE_LOGO } from '../../Constants/invoiceLogo';
+import { useSelector } from 'react-redux';
 
-const InvoicePrint = ({route}) => {
-  const {item, title} = route?.params || {};
+const InvoicePrint = ({ route }) => {
+  const { item, title } = route?.params || {};
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [pdfPath, setPdfPath] = useState(null);
-  const [imagePath, setImagePath] = useState('');
   const [price, setPrice] = useState('');
   const [totalQuantity, setTotalQuantity] = useState('');
   const [discountedPrice, setDiscountedPrice] = useState('');
@@ -64,23 +57,7 @@ const InvoicePrint = ({route}) => {
         const res = response?.data;
         setLoading(false);
         if (res?.order) {
-          navigation.navigate('MyOrder', {title: 'My Orders'});
-        }
-      })
-      .catch(err => {
-        setLoading(false);
-        console.log('err', JSON?.stringify(err, null, 2));
-      });
-  };
-  useEffect(() => {
-    getLogo();
-  }, []);
-  const getLogo = async () => {
-    await request
-      .get('logo')
-      .then(response => {
-        if (response?.data?.status == 'success') {
-          setImagePath(Config?.domain + response?.data?.banners[0]?.image);
+          navigation.navigate('MyOrder', { title: 'My Orders' });
         }
       })
       .catch(err => {
@@ -89,7 +66,9 @@ const InvoicePrint = ({route}) => {
       });
   };
   const generatePDF = async () => {
+    const logoHtml = `<img src="${INVOICE_LOGO}" class="logo" alt="" />`;
     const orderLines = Array.isArray(item?.order_item) ? item.order_item : [];
+
     const htmlContent = `
     <html>
       <head>
@@ -113,7 +92,8 @@ const InvoicePrint = ({route}) => {
          .logo {
           display: block;
           margin: 0 auto;
-          width: 150px;
+          width: 220px;
+          height: auto;
           margin-bottom: 10px;
           }
           .meta-table {
@@ -160,11 +140,7 @@ const InvoicePrint = ({route}) => {
       </head>
       <body>
         <div class="invoice-container">
-          ${
-            imagePath
-              ? `<img src="${escapeHtml(imagePath)}" class="logo" alt="Logo" />`
-              : ''
-          }
+         ${logoHtml}
           <div class="header">Invoice</div>
           <table class="meta-table">
             <tr>
@@ -236,18 +212,21 @@ const InvoicePrint = ({route}) => {
         Toast.show('PDF could not be created.', Toast.SHORT);
         return;
       }
-      console.log('PDF generated at:', filePath);
+      console.log('ssPDF generated at:', filePath);
       setPdfPath(filePath);
 
       try {
-        await shareInvoicePdf(filePath, {title: 'Share PDF'});
+        await shareInvoicePdf(filePath, { title: 'Share PDF' });
       } catch (shareErr) {
         const dismissed =
           shareErr?.message === 'User did not share' ||
           `${shareErr}`.includes('User did not share');
         if (!dismissed) {
           console.warn('Share PDF:', shareErr);
-          Toast.show('PDF saved. Sharing failed — open Files to share it.', Toast.SHORT);
+          Toast.show(
+            'PDF saved. Sharing failed — open Files to share it.',
+            Toast.SHORT,
+          );
         }
       }
     } catch (error) {

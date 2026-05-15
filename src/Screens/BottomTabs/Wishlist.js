@@ -5,16 +5,16 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {hp, wp} from '../../Constants/Responsive';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
-import {FlatList} from 'react-native';
-import {mainContainer} from '../../Constants/StyleSheet';
+import React, { useEffect, useState } from 'react';
+import { hp, wp } from '../../Constants/Responsive';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
+import { FlatList } from 'react-native';
+import { mainContainer } from '../../Constants/StyleSheet';
 import WishlistComp from '../../Components/WishlistComp';
-import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
-import {request} from '../../Api_Services/ApiServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { request } from '../../Api_Services/ApiServices';
 import {
   ADD_TO_CARD,
   DECREMENT_QUANTITY,
@@ -30,7 +30,7 @@ import {
   INCREMENT_RECOMMENDED_QUANTITY,
 } from '../../Redux/Features/RecommendedCardSlice';
 
-const Wishlist = ({route}) => {
+const Wishlist = ({ route }) => {
   const recommended = route?.params?.recommend;
   const getCardData = useSelector(state => state?.CARD?.CART);
   const user = useSelector(state => state?.AUTH?.storeData);
@@ -76,7 +76,7 @@ const Wishlist = ({route}) => {
       product_id: item?.product?.id,
       product_name: item?.product?.product_name,
       image: item?.product?.product_image[0]?.product_image,
-      price: item?.product_price,
+      price: item?.product?.price,
       quantity: 0,
       store_id: item?.product?.store_id,
       store_manager_id: item?.product?.store_manager_id,
@@ -162,7 +162,8 @@ const Wishlist = ({route}) => {
                 fontFamily: Fonts.medium,
                 fontSize: fontSize.S1,
                 color: Colors.primary,
-              }}>
+              }}
+            >
               Loading Products...
             </Text>
           </View>
@@ -173,13 +174,13 @@ const Wishlist = ({route}) => {
             keyExtractor={item => item?.product_id?.toString()}
             contentContainerStyle={styles.flatlistStyle}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <View style={styles.itemContainer}>
                 <WishlistComp
                   imgSource={item?.product?.product_image[0]?.product_image}
                   title={item.product?.product_name}
                   name={item?.vendor?.vendor_name}
-                  text={item?.product_price}
+                  text={item?.product?.price}
                   isFavorite={item?.is_in_wishlist}
                   quantity={getQuantity(item?.product?.id, item?.vendor?.id)}
                   onIncrease={() => increaseQuantity(item)}
@@ -190,7 +191,7 @@ const Wishlist = ({route}) => {
             )}
           />
         ) : (
-          <Text style={{color: Colors?.black}}>No data found</Text>
+          <Text style={{ color: Colors?.black }}>No data found</Text>
         )}
       </View>
     </SafeAreaView>

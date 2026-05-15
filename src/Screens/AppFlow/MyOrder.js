@@ -6,21 +6,26 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {mainContainer} from '../../Constants/StyleSheet';
+import React, { useEffect, useState } from 'react';
+import { mainContainer } from '../../Constants/StyleSheet';
 import Header from '../../Components/Header';
 import MyOrderComp from '../../Components/MyOrderComp';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import {hp} from '../../Constants/Responsive';
-import {useSelector} from 'react-redux';
-import {request} from '../../Api_Services/ApiServices';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import { hp } from '../../Constants/Responsive';
+import { useSelector } from 'react-redux';
+import { request } from '../../Api_Services/ApiServices';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
 
 const MyOrder = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+
   const title = route?.params?.title;
   const [loading, setLoading] = useState(false);
   const user = useSelector(state => state?.AUTH?.storeData);
@@ -64,7 +69,7 @@ const MyOrder = () => {
     }
   };
   const pressItem = item => {
-    navigation?.navigate('InvoicePrint', {item, title: title});
+    navigation?.navigate('InvoicePrint', { item, title: title });
   };
   return (
     <SafeAreaView style={mainContainer}>
@@ -78,8 +83,8 @@ const MyOrder = () => {
         <FlatList
           data={orders}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom: hp(10)}}
-          renderItem={({item}) => (
+          contentContainerStyle={{ paddingBottom: hp(10) }}
+          renderItem={({ item }) => (
             <MyOrderComp
               pressItem={() => pressItem(item)}
               title={item?.vendor?.vendor_name}
@@ -94,8 +99,8 @@ const MyOrder = () => {
           keyExtractor={(item, index) => index.toString()}
         />
       ) : (
-        <View style={{alignItems: 'center', marginTop: hp(5)}}>
-          <Text style={{color: 'black'}}>No Data Found</Text>
+        <View style={{ alignItems: 'center', marginTop: hp(5) }}>
+          <Text style={{ color: 'black' }}>No Data Found</Text>
         </View>
       )}
     </SafeAreaView>

@@ -8,6 +8,7 @@ import ChooseStore from '../Screens/AppFlow/ChooseStore';
 import {useSelector} from 'react-redux';
 import {apiHeaders} from '../Api_Services/ApiServices';
 import Register from '../Screens/Auth/Register';
+import {defaultScreenOptions} from '../Constants/navigationScreenOptions';
 
 const AuthNavigation = () => {
   const userData = useSelector(state => state.AUTH?.userData);
@@ -18,7 +19,7 @@ const AuthNavigation = () => {
   const AUTH_STACK = createNativeStackNavigator();
   return (
     <AUTH_STACK.Navigator
-      screenOptions={{headerShown: false}}
+      screenOptions={defaultScreenOptions}
       initialRouteName={userData ? 'ChooseStore' : 'Login'}>
       <AUTH_STACK.Screen name="Login" component={Login} />
       <AUTH_STACK.Screen name="Register" component={Register} />

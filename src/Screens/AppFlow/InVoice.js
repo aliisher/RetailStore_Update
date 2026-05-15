@@ -22,11 +22,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { request } from '../../Api_Services/ApiServices';
 import { EMPTY_CARD } from '../../Redux/Features/CardSlice';
 import { generatePDF as createPdfFromHtml } from 'react-native-html-to-pdf';
-import { Config } from '../../Api_Services/Config';
 import { EMPTY_RECOMMENDED_CARD } from '../../Redux/Features/RecommendedCardSlice';
 import Toast from 'react-native-simple-toast';
 import { escapeHtml } from '../../Utils/escapeHtml';
 import { shareInvoicePdf } from '../../Utils/shareInvoicePdf';
+import { INVOICE_LOGO } from '../../Constants/invoiceLogo';
 
 const InVoice = ({ route }) => {
   const dispatch = useDispatch();
@@ -42,27 +42,12 @@ const InVoice = ({ route }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
-  const [imagePath, setImagePath] = useState('');
   const [loadingButton, setLoadingButton] = useState(null);
 
   useEffect(() => {
     generateShortInvoiceNumber();
-    getLogo();
   }, []);
 
-  const getLogo = async () => {
-    await request
-      .get('logo')
-      .then(response => {
-        if (response?.data?.status == 'success') {
-          setImagePath(Config?.domain + response?.data?.banners[0]?.image);
-        }
-      })
-      .catch(err => {
-        setLoading(false);
-        console.log('err', JSON?.stringify(err, null, 2));
-      });
-  };
   const cardData = recommed ? RECOMMENDED_CARD : getCardData;
   const placeOrder = async (PDF, buttonType) => {
     // if (!discount) {
@@ -206,7 +191,8 @@ const InVoice = ({ route }) => {
   const finalPrice = (productPrice - discountAmount).toFixed(2);
 
   const generatePDF = async () => {
-    console.log('cardData', cardData);
+    const logoHtml = `<img src="${INVOICE_LOGO}" class="logo" alt="" />`;
+
     const discount = cardData[0]?.discount || 0;
     const productPrice = routeData?.product_Price || 0;
 
@@ -230,8 +216,9 @@ const InVoice = ({ route }) => {
             }
             .logo {
               display: block;
-              margin: 0 auto; /* Center the logo horizontally */
-              width: 150px; /* Adjust size as needed */
+              margin: 0 auto;
+              width: 220px;
+              height: auto;
               margin-bottom: 10px;
             }
             .header {
@@ -297,17 +284,15 @@ const InVoice = ({ route }) => {
         </head>
         <body>
           <div class="invoice-container">
-          ${
-            imagePath
-              ? `<img src="${escapeHtml(imagePath)}" class="logo" alt="Logo" />`
-              : ''
-          }
+          ${logoHtml}
             <div class="header">Invoice</div>
             <table class="meta-table">
               <tr>
                 <td style="width:50%;">
                   <p>Date: ${escapeHtml(formattedDate)}</p>
-                  <p>Store Manager: ${escapeHtml(cardData[0]?.store_manager_name)}</p>
+                  <p>Store Manager: ${escapeHtml(
+                    cardData[0]?.store_manager_name,
+                  )}</p>
                   <p>Invoice for: ${escapeHtml(cardData[0]?.vendor_name)}</p>
                   <p>Store Phone: ${escapeHtml(storeData?.store_phone_no)}</p>
                 </td>
@@ -391,7 +376,7 @@ const InVoice = ({ route }) => {
   return (
     <SafeAreaView style={mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header title="Invoice" onPress={() => navigation.goBack()} />
+        <Header title="Invdoice" onPress={() => navigation.goBack()} />
 
         <View style={styles.invoiceView}>
           <Text style={styles.invoiceText}>Invoice</Text>

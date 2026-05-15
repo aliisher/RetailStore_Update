@@ -1,5 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {defaultScreenOptions} from '../Constants/navigationScreenOptions';
 import Department from '../Screens/AppFlow/Department';
 import Products from '../Screens/AppFlow/Products';
 import ProductDetail from '../Screens/AppFlow/ProductDetail';
@@ -18,7 +19,7 @@ import RecommendedWishList from '../Screens/AppFlow/RecommendedWishList';
 const FlowNavigation = () => {
   const FLOW_STACK = createNativeStackNavigator();
   return (
-    <FLOW_STACK.Navigator screenOptions={{headerShown: false}}>
+    <FLOW_STACK.Navigator screenOptions={defaultScreenOptions}>
       <FLOW_STACK.Screen name="Parent" component={Parent} />
       <FLOW_STACK.Screen name="Department" component={Department} />
       <FLOW_STACK.Screen name="Products" component={Products} />
