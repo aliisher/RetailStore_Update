@@ -9,19 +9,24 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {mainContainer} from '../../Constants/StyleSheet';
+import React, { useEffect, useState } from 'react';
+import { mainContainer } from '../../Constants/StyleSheet';
 import TextInputComp from '../../Components/TextInputComp';
 import WholeSaleComp from '../../Components/WholeSaleComp';
-import {searchImg} from '../../Assets/Index';
-import {hp, isMobileScreen, windowWidth, wp} from '../../Constants/Responsive';
-import {Colors} from '../../Constants/Colors';
-import {Fonts, fontSize} from '../../Constants/Fonts';
+import { searchImg } from '../../Assets/Index';
+import {
+  hp,
+  isMobileScreen,
+  windowWidth,
+  wp,
+} from '../../Constants/Responsive';
+import { Colors } from '../../Constants/Colors';
+import { Fonts, fontSize } from '../../Constants/Fonts';
 import Btn from '../../Components/Btn';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {request} from '../../Api_Services/ApiServices';
-import {useDispatch, useSelector} from 'react-redux';
-import {setPlaceOrderData} from '../../Redux/Features/UserData';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { request } from '../../Api_Services/ApiServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPlaceOrderData } from '../../Redux/Features/UserData';
 import {
   ADD_TO_RECOMMENDED_CARD,
   REMOVE_FROM_RECOMMENDED_CARD,
@@ -84,7 +89,7 @@ const Vendors = () => {
             const product_Detail = {
               product_id: item?.product?.id,
               product_name: item?.product?.product_name,
-              image: item?.product?.product_image[0].product_image,
+              image: item?.product?.product_image?.[0]?.product_image || '',
               price: item?.product_price,
               quantity: item?.recommended_quantity,
               store_id: item?.store_id,
@@ -103,7 +108,9 @@ const Vendors = () => {
 
           // Step 4: Navigate to the recommended cart after all products are added
           setIsVisible(false);
-          navigation.navigate('RecommendedCartComponent', {recommended: true});
+          navigation.navigate('RecommendedCartComponent', {
+            recommended: true,
+          });
         } else if (response?.data?.status == 'info') {
           // Step 5: Handle any errors from the API
           setIsVisible(false);
@@ -116,7 +123,7 @@ const Vendors = () => {
   };
   const manual = () => {
     setIsVisible(false);
-    navigation.navigate('Department', {vender_Id: venderId});
+    navigation.navigate('Department', { vender_Id: venderId });
   };
   const filterChat = userData?.email
     ? vendorsData.filter(item =>
@@ -142,7 +149,7 @@ const Vendors = () => {
             ...prevState,
             degreeError: null,
           }));
-          setUserData(prevState => ({...prevState, email: text}));
+          setUserData(prevState => ({ ...prevState, email: text }));
         }}
       />
       <View style={styles.flatListView}>
@@ -157,14 +164,15 @@ const Vendors = () => {
             numColumns={2}
             contentContainerStyle={styles.flatlistStyle}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.itemContainer}
                 onPress={() => {
                   dispatch(setPlaceOrderData(item));
                   setIsVisible(true);
                   setVenderID(item?.vendor?.id);
-                }}>
+                }}
+              >
                 <WholeSaleComp
                   imgSource={item.vendor?.image}
                   title={item?.vendor?.vendor_name}
@@ -174,14 +182,15 @@ const Vendors = () => {
             )}
           />
         ) : (
-          <Text style={{color: 'black'}}>No data found</Text>
+          <Text style={{ color: 'black' }}>No data found</Text>
         )}
       </View>
       <Modal
         visible={isVisible}
         animationType="fade"
         transparent={true}
-        onRequestClose={() => setIsVisible(false)}>
+        onRequestClose={() => setIsVisible(false)}
+      >
         <TouchableWithoutFeedback onPress={() => setIsVisible(false)}>
           <View style={styles.mainView}>
             <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>

@@ -23,6 +23,7 @@ import Contacts from '../Screens/BottomTabs/Contacts';
 import { wp, windowWidth, isMobileScreen } from '../Constants/Responsive';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, View, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { request } from '../Api_Services/ApiServices';
 import { setWishlistCount } from '../Redux/Features/WishliSlice';
 import { useIsFocused } from '@react-navigation/native';
@@ -30,9 +31,13 @@ import { useIsFocused } from '@react-navigation/native';
 const BOTTOM_TABS = createBottomTabNavigator();
 
 const BottomTabs = () => {
+  const insets = useSafeAreaInsets();
   const user = useSelector(state => state?.AUTH?.storeData);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
+  const tabBarPadding = wp(0.35);
+  const baseTabBarHeight = isMobileScreen ? wp(16.5) : windowWidth * 0.082;
+  const bottomInset = insets.bottom;
   const cartItems = useSelector(state => state?.CARD?.CART || []);
   const cartLength = cartItems.length;
   const wishlistLength = useSelector(state => state?.WishliSlice?.count);
@@ -70,9 +75,9 @@ const BottomTabs = () => {
         },
         tabBarStyle: {
           backgroundColor: Colors.whiteSmoke,
-          height: isMobileScreen ? wp(16.5) : windowWidth * 0.082,
-          paddingTop: wp(0.35),
-          paddingBottom: wp(0.35),
+          height: baseTabBarHeight + bottomInset,
+          paddingTop: tabBarPadding,
+          paddingBottom: tabBarPadding + bottomInset,
         },
       }}
     >
