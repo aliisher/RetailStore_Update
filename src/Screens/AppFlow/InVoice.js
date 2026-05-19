@@ -376,7 +376,7 @@ const InVoice = ({ route }) => {
   return (
     <SafeAreaView style={mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header title="Invdoice" onPress={() => navigation.goBack()} />
+        <Header title="Invoice" onPress={() => navigation.goBack()} />
 
         <View style={styles.invoiceView}>
           <Text style={styles.invoiceText}>Invoice</Text>

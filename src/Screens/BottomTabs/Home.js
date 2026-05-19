@@ -62,7 +62,6 @@ const Home = () => {
   const [venderId, setVenderID] = useState([]);
   const user = useSelector(state => state?.AUTH?.userData);
   const store = useSelector(state => state?.AUTH?.storeData);
-  console.log('@STORE', store);
   useEffect(() => {
     if (isFocused) {
       getBannerData();
@@ -77,7 +76,7 @@ const Home = () => {
     if (venderId) {
       try {
         const response = await request.get(
-          `recommendedProduct/${params?.store_manager_id}/${params?.store_id}/${venderId}`,
+          `recommendedProduct/${store?.store_manager_id}/${store?.store_id}/${venderId}`,
         );
         if (response?.data?.status == 'success') {
           const products = response?.data?.products;

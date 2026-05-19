@@ -126,7 +126,7 @@ const ProductDetail = ({ route }) => {
       product_id: productDetail?.product_id,
       product_name: productDetail?.product?.product_name,
       image: productDetail?.product?.product_image[0]?.product_image,
-      price: productDetail?.product?.price,
+      price: productDetail?.product_price,
       quantity: 0,
       store_id: productDetail?.product?.store_id,
       store_manager_id: productDetail?.product?.store_manager_id,
@@ -177,7 +177,7 @@ const ProductDetail = ({ route }) => {
       product_id: item?.product?.id,
       product_name: item?.product?.product_name,
       image: item?.product?.product_images[0],
-      price: item?.product?.price,
+      price: item?.product_price,
       quantity: 0,
       store_id: item?.product?.store_id,
       store_manager_id: item?.product?.store_manager_id,
@@ -371,7 +371,7 @@ const ProductDetail = ({ route }) => {
                         imgSource={item?.product?.product_images[0]}
                         title={item?.product_name}
                         // text={item?.price}
-                        text={item?.product?.price}
+                        text={item?.product_price}
                         name={item?.vendor_name}
                         isFavorite={item?.is_in_wishlist}
                         quantity={quantity(item?.product?.id, item?.vendor_id)}

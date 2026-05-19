@@ -221,7 +221,7 @@ const Products = ({ route }) => {
       product_id: item?.product?.id,
       product_name: item?.product?.product_name,
       image: item?.product?.product_image[0]?.product_image,
-      price: item?.product?.price,
+      price: item?.product_price,
       quantity: 0,
       store_id: item?.product?.store_id,
       store_manager_id: item?.product?.store_manager_id,
@@ -380,7 +380,7 @@ const Products = ({ route }) => {
                 productClick={() => handleNavigation(item?.product?.id)}
                 imgSource={item?.product?.product_image}
                 title={item?.product?.product_name}
-                text={item?.product?.price}
+                text={item?.product_price}
                 vendorName={item?.vendor_name}
                 favorite={() => favoriteFunction(item)}
                 quantity={getQuantity(item?.product?.id, item?.vendor_id)}
