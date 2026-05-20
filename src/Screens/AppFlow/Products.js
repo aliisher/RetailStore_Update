@@ -52,7 +52,6 @@ const Products = ({ route }) => {
     searchQuery: '',
   });
   const [searchResults, setSearchResults] = useState([]);
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -85,7 +84,6 @@ const Products = ({ route }) => {
       const response = await request.get(
         `products/${routeData?.vender_Id}/${routeData?.department_ID}/${storeGet?.store_manager_id}/${storeGet?.store_id}?page=${page}`,
       );
-      console.log('@RESSPOCNE', response?.data);
       Toast.show(response?.data?.message, Toast.SHORT);
 
       const sortedProducts =

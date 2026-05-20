@@ -219,6 +219,10 @@ const Register = () => {
         ref={scrollRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentContainerStyle}
+        enableOnAndroid
+        enableAutomaticScroll
+        extraScrollHeight={hp(12)}
+        keyboardShouldPersistTaps="handled"
       >
         <Header title={'Create Account'} onPress={() => navigation.goBack()} />
 
@@ -446,7 +450,11 @@ const Register = () => {
             errorMessage={errorMessages?.store_Phone_Number_Error}
             keyboardType={'numeric'}
             onChangeText={handleStorePhoneNumberChange}
-            inputContainer={{
+            onFocus={e => {
+              setFocusStorePhoneNumber(true);
+              scrollRef?.current?.scrollToFocusedInput(e.target);
+            }}
+            inputCotainer={{
               borderWidth: focusStorePhoneNumber ? wp(0.3) : wp(0),
               borderColor: focusStorePhoneNumber ? Colors.primary : 'grey',
             }}
@@ -470,10 +478,15 @@ const Register = () => {
                 ...prevState,
                 recommended_By: text,
               }));
+              setTimeout(() => {
+                scrollRef?.current?.scrollToEnd(true);
+              }, 50);
             }}
-            onFocus={e => {
+            onFocus={() => {
               setFocusRecommendedBy(true);
-              scrollRef?.current?.scrollToFocusedInput(e.target);
+              setTimeout(() => {
+                scrollRef?.current?.scrollToEnd(true);
+              }, 300);
             }}
             inputCotainer={{
               borderWidth: focusRecommendedBy ? wp(0.3) : wp(0),
@@ -617,6 +630,7 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     flexGrow: 1,
     alignItems: 'center',
+    paddingBottom: wp(30),
   },
   textInput: {
     bottom: isMobileScreen ? hp('5%') : null,

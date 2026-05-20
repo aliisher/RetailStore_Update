@@ -372,7 +372,6 @@ const InVoice = ({ route }) => {
       );
     }
   };
-
   return (
     <SafeAreaView style={mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
