@@ -85,7 +85,7 @@ const ProductDetail = ({ route }) => {
         setProductDetail(product);
         setProductNamePrice({
           name: product?.product?.product_name,
-          price: product?.product?.price,
+          price: product?.product_price,
           productId: product?.product_id,
         });
         return product?.product?.product_image || [];

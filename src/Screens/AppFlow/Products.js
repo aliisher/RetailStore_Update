@@ -76,7 +76,7 @@ const Products = ({ route }) => {
     if (loadMore) {
       setLoadingMore(true);
     } else {
-      setLoading(false);
+      setLoading(true);
       setHasMoreData(false);
       setProducts([]); // Clear the products list for a fresh load
     }
